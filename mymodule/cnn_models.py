@@ -1,12 +1,14 @@
 from keras import backend as K
-from keras.models import Input, Model
-from keras.layers.core import Layer, Dense, Dropout, Activation, Flatten, Reshape, Permute, Lambda
-from keras.layers import Merge, merge, Concatenate, concatenate, MaxPooling1D, multiply
+from tensorflow.keras.layers import Input
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Layer, Dense, Dropout, Activation, Flatten, Reshape, Permute, Lambda
+from tensorflow.keras.layers import Concatenate, concatenate, MaxPooling1D, multiply
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, UpSampling2D, ZeroPadding2D, Conv1D, Conv2D, AveragePooling2D
 from keras.layers.pooling import GlobalAveragePooling2D
-from keras.layers.normalization import BatchNormalization
+from tensorflow.keras.layers import BatchNormalization
 from keras.utils import np_utils
 from keras.optimizers import Adam, Adadelta
+
 
 def get_densenet_2d_channel_first_2dense(rows, cols):
 
@@ -26,7 +28,7 @@ def get_densenet_2d_channel_first_2dense(rows, cols):
     x3 = Conv2D(16, (3, 3), padding='same', name='conv3')(xc1a)
     x3 = Dropout(0.2)(x3)
 
-    xc2 = concatenate([x3,x2,x1], axis=3)
+    xc2 = concatenate([x3, x2, x1], axis=3)
 
     # Transition
     xc2a = Activation('relu')(xc2)
@@ -44,14 +46,14 @@ def get_densenet_2d_channel_first_2dense(rows, cols):
     xc1a = Activation('relu')(xc1)
     x3 = Conv2D(16, (3, 3), padding='same', name='conv6')(xc1a)
     x3 = Dropout(0.2)(x3)
-    xc2 = concatenate([x3,x2,x1], axis=3)
+    xc2 = concatenate([x3, x2, x1], axis=3)
     # xc2 = x3
 
     xc2a = Activation('relu')(xc2)
     x4 = Conv2D(80, (1, 1), padding='same', name='conv7')(xc2a)
 
     x = Flatten()(x4)
-    x = Dense(128,activation='relu',name='dense1b')(x)
+    x = Dense(128, activation='relu', name='dense1b')(x)
     x = Dense(3, name='dense2')(x)
 
     normalize = Lambda(lambda x: K.l2_normalize(x, axis=-1))
@@ -59,8 +61,9 @@ def get_densenet_2d_channel_first_2dense(rows, cols):
 
     outputs = x
 
-    model = Model(inputs = inputs1, outputs = outputs)
+    model = Model(inputs=inputs1, outputs=outputs)
     return model
+
 
 def get_densenet_2d_channel_last_2dense(rows, cols):
 
@@ -80,7 +83,7 @@ def get_densenet_2d_channel_last_2dense(rows, cols):
     x3 = Conv2D(16, (3, 3), padding='same', name='conv3')(xc1a)
     x3 = Dropout(0.2)(x3)
 
-    xc2 = concatenate([x3,x2,x1], axis=3)
+    xc2 = concatenate([x3, x2, x1], axis=3)
 
     # Transition
     xc2a = Activation('relu')(xc2)
@@ -98,13 +101,13 @@ def get_densenet_2d_channel_last_2dense(rows, cols):
     xc1a = Activation('relu')(xc1)
     x3 = Conv2D(16, (3, 3), padding='same', name='conv6')(xc1a)
     x3 = Dropout(0.2)(x3)
-    xc2 = concatenate([x3,x2,x1], axis=3)
+    xc2 = concatenate([x3, x2, x1], axis=3)
 
     xc2a = Activation('relu')(xc2)
     x4 = Conv2D(80, (1, 1), padding='same', name='conv7')(xc2a)
 
     x = Flatten()(x4)
-    x = Dense(128,activation='relu',name='dense1b')(x)
+    x = Dense(128, activation='relu', name='dense1b')(x)
     x = Dense(3, name='dense2')(x)
 
     normalize = Lambda(lambda x: K.l2_normalize(x, axis=-1))
@@ -112,5 +115,5 @@ def get_densenet_2d_channel_last_2dense(rows, cols):
 
     outputs = x
 
-    model = Model(inputs = inputs1, outputs = outputs)
+    model = Model(inputs=inputs1, outputs=outputs)
     return model
