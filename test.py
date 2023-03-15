@@ -21,11 +21,11 @@ from mymodule import cnn_models as cm
 def main():
     isParallel = True  # one if multi gpu is available
     dirlist = []
-    diligent = '/home/ruggero/Documents/DiLiGenT/pmsData'
+    diligent = 'DiLiGenT/pmsData'
 
     # Set the directory list
     # objlist = ('ballPNG','bearPNG','buddhaPNG','catPNG','cowPNG','gobletPNG','harvestPNG','pot1PNG','pot2PNG','readingPNG')
-    objlist = (['buddhaPNG'])
+    objlist = (['fossil'])
 
     for f in objlist:
         dirlist.append(diligent + '/' + f)
@@ -34,11 +34,13 @@ def main():
     # Prepare images
     scale = 1  # downsize the image by this scale
     w = 32  # size of observation map
-    K = 1   # the number of different rotations for the rotational pseudo-invariance
+    K = 1  # the number of different rotations for the rotational pseudo-invariance
 
     [Sv, Nv, Rv, IDv, Szv] = dio.prep_data_2d_from_images_test(
         dirlist, scale, w, K)  # Comment this line when runnning test on bearPNG
-    # [Sv, Nv, Rv, IDv, Szv] = dio.prep_data_2d_from_images_test(dirlist, scale, w, K, index = range(20, 96)) # Uncomment this if you want to use the subset of images (in this case, 20-th to 96-th images are input)
+    # Uncomment this if you want to use the subset of images (in this case, 20-th to 96-th images are input)
+    # [Sv, Nv, Rv, IDv, Szv] = dio.prep_data_2d_from_images_test(
+    #     dirlist, scale, w, K, index=range(0, 36))
     # Load pretrained model
     if KERAS.image_data_format() == 'channels_first':  # theano
         model = cm.get_densenet_2d_channel_first_2dense(w, w)
