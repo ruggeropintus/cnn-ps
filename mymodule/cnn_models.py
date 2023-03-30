@@ -117,3 +117,7 @@ def get_densenet_2d_channel_last_2dense(rows, cols):
 
     model = Model(inputs=inputs1, outputs=outputs)
     return model
+
+
+# model = get_densenet_2d_channel_last_2dense(28, 28)
+# print(model.summary())
